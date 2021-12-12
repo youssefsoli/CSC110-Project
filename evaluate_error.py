@@ -34,7 +34,8 @@ def evaluate_rmse_manual_regression(test_data: pd.DataFrame,
 
     rmse = (rmse_so_far / len(days_list)) ** 0.5
     return rmse
-    # rmse is strongly affected by outliers, so mae is a more intuitive alternative
+    # rmse is more forgiving to small errors and more strongly affected by outliers
+    # compared to mae
 
 
 def evaluate_mae(test_data: pd.DataFrame, reg_equation: tuple[float, float]) -> float:
