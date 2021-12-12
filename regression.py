@@ -24,10 +24,10 @@ def calculate_days(current_date: datetime.date) -> int:
 
 def calculate_regression_slope(data: list) -> float:
     """DOCSTRING"""
-    sigma_xy = sum([calculate_days(entry.transaction_date) * entry.index for entry in data])
-    sigma_x = sum([calculate_days(entry.transaction_date) for entry in data])
-    sigma_x_squared = sum([(calculate_days(entry.transaction_date) ** 2) for entry in data])
-    sigma_y = sum([entry.index for entry in data])
+    sigma_xy = sum(calculate_days(entry.transaction_date) * entry.index for entry in data)
+    sigma_x = sum(calculate_days(entry.transaction_date) for entry in data)
+    sigma_x_squared = sum((calculate_days(entry.transaction_date) ** 2) for entry in data)
+    sigma_y = sum(entry.index for entry in data)
     n = len(data)
 
     slope = ((n * sigma_xy) - (sigma_x * sigma_y))/((n * sigma_x_squared) - (sigma_x ** 2))
@@ -36,7 +36,7 @@ def calculate_regression_slope(data: list) -> float:
 
 def calculate_regression_intercept(data: list, slope: float) -> float:
     """DOCSTRING"""
-    sigma_x = sum([calculate_days(entry.transaction_date) for entry in data])
+    sigma_x = sum(calculate_days(entry.transaction_date) for entry in data)
     sigma_y = sum([entry.index for entry in data])
     n = len(data)
     intercept = (sigma_y - slope * sigma_x) / n
