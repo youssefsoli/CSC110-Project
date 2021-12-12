@@ -3,3 +3,6 @@ plotly
 
 # Data manipulation
 pandas
+
+# Machine learning library
+sklearn
