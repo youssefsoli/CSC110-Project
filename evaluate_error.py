@@ -1,5 +1,4 @@
-"""DOCSTRING
-
+"""
 Copyright and Usage Information
 ===============================
 
@@ -17,7 +16,9 @@ import regression
 
 def evaluate_rmse_manual_regression(test_data: pd.DataFrame,
                                     reg_equation: tuple[float, float]) -> float:
-    """return the rmse of the test data with the regression line."""
+    """
+    return the rmse of the test data with the regression line.
+    """
 
     # turn datetime.time into days that passed from baseline date 1 Jul 1990
     test_data['transaction_date'] = test_data['transaction_date'].apply(regression.calculate_days)

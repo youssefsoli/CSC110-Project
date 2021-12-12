@@ -1,5 +1,4 @@
-"""DOCSTRING
-
+"""
 Copyright and Usage Information
 ===============================
 
@@ -38,7 +37,7 @@ def calculate_days(current_date: datetime.date) -> int:
     return days_passed.days
 
 
-def calculate_regression_slope(days_data: list, index_data: list) -> float:
+def calculate_regression_slope(days_data: list[datetime.date], index_data: list) -> float:
     """
     Return the regression slope as a numerical value.
     """
@@ -63,11 +62,11 @@ def calculate_regression_intercept(days_data: list, index_data: list, slope: flo
     return intercept
 
 
-def natural_logarithm(data: list[IndexData]) -> list[IndexData]:
+def natural_logarithm(index_data: list[float]) -> list[float]:
     """
-    Return a list of IndexData with the natural logarithm applied to all index values.
+    Return a list of the natural logarithm of index values.
     """
-    new_data = data.copy()
+    new_data = index_data.copy()
 
     for entry in new_data:
         entry.index = math.log(entry.index)
