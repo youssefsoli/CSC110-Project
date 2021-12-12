@@ -12,7 +12,8 @@ project, please consult one of the team members.
 This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej Jaspal Capildeo.
 """
 import datetime
-
+import math
+from housing_entry import IndexData
 import pandas as pd
 
 
@@ -32,7 +33,7 @@ def least_squares_regression(data: pd.DataFrame) -> tuple[float, float]:
 
 
 def calculate_days(current_date: datetime.date) -> int:
-    """return days passed since baseline date Jun 1990 to current_date
+    """Return the number of days passed from the baseline date, Jun 1990, to current_date
 
     Preconditions:
         - current_date >= datetime.date(1990, 7, 1)
@@ -76,3 +77,15 @@ def calculate_regression(days_data: list[datetime.date], index_data: list[float]
     slope = ((n * sigma_xy) - (sigma_x * sigma_y))/((n * sigma_x_squared) - (sigma_x ** 2))
     intercept = (sigma_y - slope * sigma_x) / n
     return (slope, intercept)
+
+
+def natural_logarithm(data: list[IndexData]) -> list[IndexData]:
+    """
+    Return a list of IndexData with the natural logarithm applied to all index values.
+    """
+    new_data = data.copy()
+
+    for entry in new_data:
+        entry.index = math.log(entry.index)
+
+    return new_data

@@ -23,7 +23,7 @@ def evaluate_rmse_manual_regression(test_data: pd.DataFrame,
     test_data['transaction_date'] = test_data['transaction_date'].apply(regression.calculate_days)
 
     days_list = test_data['transaction_date'].to_list()
-    test_index = test_data['index'].to_list
+    test_index = test_data['index'].to_list()
 
     # Accumulator
     rmse_so_far = 0

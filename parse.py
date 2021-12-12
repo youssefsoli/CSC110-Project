@@ -20,7 +20,13 @@ from housing_entry import IndexData
 
 def load_data(filename: str) -> dict[str, list[IndexData]]:
     """
-    Returns a list containing housing data for each transcation date
+    Returns a dictionary mapping a Canadian city to a list of housing data (including transaction
+    dates and housing index prices).
+
+    Each row in the csv must have 25 elements.
+
+    Preconditions:
+      - all(len(row) == 25 for row in reader)
     """
     data = {}
     with open(filename) as f:
@@ -48,4 +54,4 @@ def load_data(filename: str) -> dict[str, list[IndexData]]:
 
 
 if __name__ == '__main__':
-    print(load_data()['c11'][5])
+    print(load_data('House_Price_Index.csv')['c11'][5])

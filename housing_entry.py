@@ -1,5 +1,4 @@
-"""f
-
+"""
 Copyright and Usage Information
 ===============================
 
@@ -18,7 +17,13 @@ from dataclasses import dataclass
 @dataclass()
 class IndexData:
     """
-    f
+    An observation of the house price index and number of houses for a specific month and year for
+    a specific city.
+
+    Instance Attributes:
+      - transaction_date: the year and month of the observation
+      - index: the house price index
+      - sales_pair_count: the number of houses used to calculate index
     """
     transaction_date: datetime.date
     index: float
