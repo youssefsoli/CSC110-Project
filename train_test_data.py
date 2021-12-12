@@ -1,5 +1,5 @@
 """
-This file is used to generate training and testing data
+This file is used to generate training and testing data for the regression models.
 """
 
 import pandas as pd
@@ -8,7 +8,11 @@ from housing_entry import IndexData
 
 def get_train_test_data(housing_data: dict[str, list[IndexData]]) -> dict[str, tuple[pd.DataFrame, pd.DataFrame]]:
     """
-    Returns a dictionary mapping locations to training and test data
+    Returns a dictionary mapping locations in Canada to their corresponding training and test data.
+
+    Preconditions:
+      - housing_data != {}
+
     """
     train_test_data = {}
     for location in housing_data:
