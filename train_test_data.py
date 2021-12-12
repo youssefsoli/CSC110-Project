@@ -12,7 +12,6 @@ def get_train_test_data(housing_data: dict[str, list[IndexData]]) -> dict[str, t
 
     Preconditions:
       - housing_data != {}
-
     """
     train_test_data = {}
     for location in housing_data:
