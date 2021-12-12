@@ -8,12 +8,12 @@ import datetime
 from housing_entry import IndexData
 
 
-def load_data(filename: str) -> dict[str, list[IndexData]]:
+def load_data() -> dict[str, list[IndexData]]:
     """
     Returns a list containing housing data for each transcation date
     """
     data = {}
-    with open(filename) as f:
+    with open('House_Price_Index.csv') as f:
         reader = csv.reader(f, delimiter=',')
         next(reader)  # Skip the header
         next(reader)  # Skip the header
@@ -38,4 +38,4 @@ def load_data(filename: str) -> dict[str, list[IndexData]]:
 
 
 if __name__ == '__main__':
-    print(load_data('House_Price_Index.csv')['c11'][5])
+    print(load_data()['c11'][5])
