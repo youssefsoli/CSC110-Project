@@ -31,9 +31,14 @@ for location in tt_data:
 
 # plot interactive regression lines
 
-# get rmse_error
-rmse_dict = {}
+# get rmse_error for test data
+rmse_dict_test = {}
 for location in tt_data:
-    rmse_dict[location] = \
-    evaluate_error.evaluate_rmse_manual_regression(tt_data[location][1], regression_dict[location])
+    rmse_dict_test[location] = \
+        evaluate_error.evaluate_rmse_manual_regression(tt_data[location][1], regression_dict[location])
 
+# get rmse_error for training data
+rmse_dict_training = {}
+for location in tt_data:
+    rmse_dict_training[location] = \
+        evaluate_error.evaluate_rmse_manual_regression(tt_data[location][0], regression_dict[location])
