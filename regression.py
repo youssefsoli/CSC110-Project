@@ -12,7 +12,8 @@ project, please consult one of the team members.
 This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej Jaspal Capildeo.
 """
 import datetime
-
+import math
+from housing_entry import IndexData
 import pandas as pd
 
 
@@ -29,14 +30,18 @@ def least_squares_regression(data: pd.DataFrame) -> tuple:
 
 
 def calculate_days(current_date: datetime.date) -> int:
-    """return days passed since baseline date Jun 1990 to current_date"""
+    """
+    Return the number of days passed from the baseline date, Jun 1990, to current_date
+    """
     baseline = datetime.date(1990, 7, 1)
     days_passed = current_date - baseline
     return days_passed.days
 
 
 def calculate_regression_slope(days_data: list, index_data: list) -> float:
-    """DOCSTRING"""
+    """
+    Return the regression slope as a numerical value.
+    """
     sigma_xy = sum(calculate_days(days_data[i]) * index_data[i] for i in range(0, len(days_data)))
     sigma_x = sum(calculate_days(days) for days in days_data)
     sigma_x_squared = sum((calculate_days(days) ** 2) for days in days_data)
@@ -48,9 +53,23 @@ def calculate_regression_slope(days_data: list, index_data: list) -> float:
 
 
 def calculate_regression_intercept(days_data: list, index_data: list, slope: float) -> float:
-    """DOCSTRING"""
+    """
+    Return the regression intercept as a numerical value.
+    """
     sigma_x = sum(calculate_days(days) for days in days_data)
     sigma_y = sum(index for index in index_data)
     n = len(days_data)
     intercept = (sigma_y - slope * sigma_x) / n
     return intercept
+
+
+def natural_logarithm(data: list[IndexData]) -> list[IndexData]:
+    """
+    Return a list of IndexData with the natural logarithm applied to all index values.
+    """
+    new_data = data.copy()
+
+    for entry in new_data:
+        entry.index = math.log(entry.index)
+
+    return new_data
