@@ -16,6 +16,7 @@ import regression
 import parse
 import train_test_data
 import regression
+import evaluate_error
 
 # load data
 data = parse.load_data('House_Price_Index.csv')
@@ -25,6 +26,14 @@ tt_data = train_test_data.get_train_test_data(data)
 
 # get linear regression line from train data:
 regression_dict = {}
-
 for location in tt_data:
     regression_dict[location] = regression.least_squares_regression(tt_data[location][0])
+
+# plot interactive regression lines
+
+# get rmse_error
+rmse_dict = {}
+for location in tt_data:
+    rmse_dict[location] = \
+    evaluate_error.evaluate_rmse_manual_regression(tt_data[location][1], regression_dict[location])
+
