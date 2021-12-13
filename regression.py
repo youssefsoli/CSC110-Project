@@ -49,17 +49,18 @@ def least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
     return (slope, intercept)
 
 
-def calculate_days(current_date: datetime.date) -> int:
+def calculate_days(current_date: str) -> int:
     """Return the number of days passed from the baseline date, Jun 1990, to current_date
 
     Preconditions:
-        - current_date >= datetime.date(1990, 7, 1)
+        - datetime.datetime.strptime(current_date, '%m-%d-%Y').date() >= datetime.date(1990, 7, 1)
 
-    >>> calculate_days(datetime.date(1990, 7, 1))
+    >>> calculate_days('7-1-1990')
     0
-    >>> calculate_days(datetime.date(1991, 7, 1))
+    >>> calculate_days('7-1-1991')
     365
     """
+    current_date = datetime.datetime.strptime(current_date, '%m-%d-%Y').date()
     baseline = datetime.date(1990, 7, 1)
     days_passed = current_date - baseline
     return days_passed.days
