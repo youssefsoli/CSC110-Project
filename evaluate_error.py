@@ -38,6 +38,25 @@ def evaluate_rmse_manual_regression(test_data: pd.DataFrame,
     # compared to mae
 
 
+def get_rmse_for_dataset(dataset: dict, regression_dict: dict, is_test: bool) -> dict:
+    """Return the rmse for each location of the dataset dictionary, after passing in the dictionary
+    regression dict which holds regression co-efficients of the training data by location, and the
+    whether the dataset is the test data set.
+
+    is_test = False returns  rmse values of the training dataset, and is_test = True returns the
+    rmse values of the test dataset.
+    ."""
+
+    # accumulator
+    rmse_dict_so_far = {}
+
+    for location in dataset:
+        rmse_dict_so_far[location] = \
+            evaluate_rmse_manual_regression(dataset[location][int(is_test)],
+                                            regression_dict[location])
+    return rmse_dict_so_far
+
+
 def evaluate_mae(test_data: pd.DataFrame, reg_equation: tuple[float, float]) -> float:
     """
     Return the Mean Absolute Error of the test data with the regression line.
