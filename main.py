@@ -11,7 +11,7 @@ project, please consult one of the team members.
 
 This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej Jaspal Capildeo.
 """
-from housing_entry import IndexData
+
 import parse
 import train_test_data
 import regression
@@ -19,6 +19,7 @@ import evaluate_error
 import plotly.graph_objs as go
 import pandas as pd
 import plot
+import datetime
 
 # load data
 data = parse.load_data('House_Price_Index.csv')
@@ -46,7 +47,12 @@ for location in data:
 # plot figure of actual prices
 fig = go.Figure()
 for location in data:
-    fig.add_trace(go.Scatter(x=accumulator[location]["transaction_date"], y=accumulator[location]["index"], name=location))
+    fig.add_trace(go.Scatter(x=accumulator[location]["transaction_date"],
+                             y=accumulator[location]["index"], name=location))
+
+# plot v-line for 2020 onwards
+fig.add_vline(x=datetime.date(2020, 1, 1))
+
 
 # plot interactive linear regression lines
 for location in regression_dict:
@@ -64,6 +70,14 @@ for location in exp_regression_dict:
     # plot both figs on same axis
     fig.add_scatter(x=df['x'], y=df['y'], name="Exponential: " + location)
 
+# label axis of graph
+fig.update_layout(
+    title="Scatterplot of housing index of base year 2005 to date",
+    xaxis_title="date",
+    yaxis_title="index",
+    legend_title="Location",
+)
+
 fig.show()
 
 # get rmse_error for test data
@@ -73,3 +87,4 @@ test_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, True)
 training_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, False)
 
 # compare rmse_error between test and training data
+
