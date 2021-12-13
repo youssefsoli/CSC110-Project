@@ -16,6 +16,9 @@ import parse
 import train_test_data
 import regression
 import evaluate_error
+import plotly.graph_objs as go
+import pandas as pd
+import plot
 
 # load data
 data = parse.load_data('House_Price_Index.csv')
@@ -34,8 +37,16 @@ for location in tt_data:
     log_index_list = regression.natural_logarithm(tt_data[location][0])
     exp_regression_dict[location] = regression.least_squares_regression(log_index_list)
 
+# convert list of IndexData to pandas dataframes for plotting actual prices
+accumulator = {}
+for location in data:
+    df = pd.DataFrame(data[location])
+    accumulator[location] = df
+
 # plot figure of actual prices
-fig = px.line(tt_data['c11'][0], x="transaction_date", y="index", title="Unsorted Input")
+fig = go.Figure()
+for location in data:
+    fig.add_trace(go.Scatter(x=accumulator[location]["transaction_date"], y=accumulator[location]["index"], name=location))
 
 # plot interactive linear regression lines
 for location in regression_dict:
@@ -54,12 +65,6 @@ for location in exp_regression_dict:
     fig.add_scatter(x=df['x'], y=df['y'], name="Exponential: " + location)
 
 fig.show()
-
-# plot interactive regression lines
-for location in regression_dict:
-    x_values = [i for i in range(0, 11386)]
-    y_values = [location[0] * x + location[1] for x in x_values]
-
 
 # get rmse_error for test data
 test_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, True)
