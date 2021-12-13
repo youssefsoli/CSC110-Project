@@ -34,10 +34,8 @@ for location in tt_data:
 # get exponential regression line from train data:
 exp_regression_dict = {}
 for location in tt_data:
-    date_list = tt_data[location][0]['transaction_date'].to_list()
-    index_list = tt_data[location][0]['index'].to_list()
-    log_index_list = regression.natural_logarithm(index_list)
-    exp_regression_dict[location] = regression.calculate_regression(date_list, log_index_list)
+    log_index_list = regression.natural_logarithm(tt_data[location][0])
+    exp_regression_dict[location] = regression.least_squares_regression(log_index_list)
 
 
 # plot figure of actual prices

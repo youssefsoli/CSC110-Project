@@ -65,8 +65,11 @@ def calculate_days(current_date: datetime.date) -> int:
     return days_passed.days
 
 
-def natural_logarithm(data: list[float]) -> list[float]:
+def natural_logarithm(df: pd.DataFrame) -> pd.DataFrame:
     """
     Return a list with the natural logarithm applied to all values in data.
     """
-    return [math.log(entry) for entry in data]
+    index_data = df['index'].to_list()
+    df['index'] = [math.log(entry) for entry in index_data]
+
+    return df
