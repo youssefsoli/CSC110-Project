@@ -41,13 +41,15 @@ def evaluate_rmse_manual_regression(data: pd.DataFrame,
 
 
 def get_rmse_for_dataset(dataset: dict, regression_dict: dict, is_test: bool) -> dict:
-    """Return the rmse for each location of the dataset dictionary, after passing in the dictionary
-    regression dict which holds regression co-efficients of the training data by location, and the
-    whether the dataset is the test data set.
+    """
+    Return the RMSE for each location of the dataset.
 
-    is_test = False returns  rmse values of the training dataset, and is_test = True returns the
-    rmse values of the test dataset.
-    ."""
+    The input regression_dict holds regression co-efficients of the training data by location.
+    The input is_test tells us if the dataset is the test data set.
+
+    is_test = False returns RMSE values of the training dataset, and is_test = True returns the
+    RMSE values of the test dataset.
+    """
 
     # accumulator
     rmse_dict_so_far = {}
@@ -59,7 +61,6 @@ def get_rmse_for_dataset(dataset: dict, regression_dict: dict, is_test: bool) ->
     return rmse_dict_so_far
 
 
-def evaluate_mae(test_data: pd.DataFrame, reg_equation: tuple[float, float]) -> float:
 def evaluate_mae(data: pd.DataFrame, reg_equation: tuple[float, float]) -> float:
     """
     Return the Mean Absolute Error value of the given data with the regression line.
@@ -80,3 +81,24 @@ def evaluate_mae(data: pd.DataFrame, reg_equation: tuple[float, float]) -> float
 
     mae = mae_so_far / len(days_list)
     return mae
+
+
+def get_mae_for_dataset(dataset: dict, regression_dict: dict, is_test: bool) -> dict:
+    """
+    Return the MAE for each location of the dataset.
+
+    The input regression_dict holds regression co-efficients of the training data by location.
+    The input is_test tells us if the dataset is the test data set.
+
+    is_test = False returns MAE values of the training dataset, and is_test = True returns the
+    MAE values of the test dataset.
+    """
+
+    # accumulator
+    mae_dict_so_far = {}
+
+    for location in dataset:
+        mae_dict_so_far[location] = \
+            evaluate_mae(dataset[location][int(is_test)], regression_dict[location])
+
+    return mae_dict_so_far
