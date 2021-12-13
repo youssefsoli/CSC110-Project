@@ -54,7 +54,7 @@ def get_train_test_data(housing_data: dict[str, list[IndexData]]) -> \
 
         # Generate test data for each location
         df['transaction_date'] = pd.to_datetime(df['transaction_date'])
-        mask = df['transaction_date'].dt.year == 2021 | 2020
+        mask = (df['transaction_date'].dt.year == 2021) | (df['transaction_date'].dt.year == 2020)
         test_data = df[mask]
 
         # Generate training data for each location
