@@ -1,4 +1,4 @@
-"""This file is used to parse the house price index data
+"""Parse: This file is used to parse the house price index data.
 
 Copyright and Usage Information
 ===============================
@@ -26,7 +26,7 @@ def load_data(filename: str) -> dict[str, list[IndexData]]:
     Each row in the csv must have 25 elements.
 
     Preconditions:
-      - all(len(row) == 25 for row in reader)
+      - all(len(row) == 25 for row in csv.reader(open(filename), delimiter=',')
     """
     data = {}
     with open(filename) as f:

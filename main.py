@@ -12,7 +12,6 @@ project, please consult one of the team members.
 This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej Jaspal Capildeo.
 """
 from housing_entry import IndexData
-import regression
 import parse
 import train_test_data
 import regression

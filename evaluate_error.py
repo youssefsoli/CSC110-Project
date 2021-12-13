@@ -1,4 +1,5 @@
-"""
+"""Evaluate Error: Uses several methods to evaluate the error
+
 Copyright and Usage Information
 ===============================
 
@@ -14,17 +15,17 @@ import pandas as pd
 import regression
 
 
-def evaluate_rmse_manual_regression(test_data: pd.DataFrame,
+def evaluate_rmse_manual_regression(data: pd.DataFrame,
                                     reg_equation: tuple[float, float]) -> float:
     """
-    return the rmse of the test data with the regression line.
+    Returns the Root Mean Square Error value of the given data with the regression line.
     """
 
     # turn datetime.time into days that passed from baseline date 1 Jul 1990
-    test_data['transaction_date'] = test_data['transaction_date'].apply(regression.calculate_days)
+    data['transaction_date'] = data['transaction_date'].apply(regression.calculate_days)
 
-    days_list = test_data['transaction_date'].to_list()
-    test_index = test_data['index'].to_list()
+    days_list = data['transaction_date'].to_list()
+    test_index = data['index'].to_list()
 
     # Accumulator
     rmse_so_far = 0
@@ -39,16 +40,16 @@ def evaluate_rmse_manual_regression(test_data: pd.DataFrame,
     # compared to mae
 
 
-def evaluate_mae(test_data: pd.DataFrame, reg_equation: tuple[float, float]) -> float:
+def evaluate_mae(data: pd.DataFrame, reg_equation: tuple[float, float]) -> float:
     """
-    Return the Mean Absolute Error of the test data with the regression line.
+    Return the Mean Absolute Error value of the given data with the regression line.
     """
 
     # turn datetime.time into days that passed from baseline date 1 Jul 1990
-    test_data['transaction_date'] = test_data['transaction_date'].apply(regression.calculate_days)
+    data['transaction_date'] = data['transaction_date'].apply(regression.calculate_days)
 
-    days_list = test_data['transaction_date'].to_list()
-    test_index = test_data['index'].to_list
+    days_list = data['transaction_date'].to_list()
+    test_index = data['index'].to_list
 
     # Accumulator
     mae_so_far = 0

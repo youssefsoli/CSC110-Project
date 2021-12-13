@@ -79,13 +79,8 @@ def calculate_regression(days_data: list[datetime.date], index_data: list[float]
     return (slope, intercept)
 
 
-def natural_logarithm(data: list[IndexData]) -> list[IndexData]:
+def natural_logarithm(data: list[float]) -> list[float]:
     """
-    Return a list of IndexData with the natural logarithm applied to all index values.
+    Return a list with the natural logarithm applied to all values in data.
     """
-    new_data = data.copy()
-
-    for entry in new_data:
-        entry.index = math.log(entry.index)
-
-    return new_data
+    return [math.log(entry) for entry in data]

@@ -1,4 +1,4 @@
-"""This file is used to generate training and testing data
+"""Train-test Data: This file is used to generate training and testing data.
 
 Copyright and Usage Information
 ===============================

@@ -1,4 +1,4 @@
-"""Plotting
+"""Plotting: This file is used to plot the regression model lines on a scatterplot.
 
 Copyright and Usage Information
 ===============================
