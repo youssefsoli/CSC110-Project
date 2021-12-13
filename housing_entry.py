@@ -1,4 +1,5 @@
-"""
+"""Housing Entry: Holds a dataclass representing each entry in the dataframe.
+
 Copyright and Usage Information
 ===============================
 
