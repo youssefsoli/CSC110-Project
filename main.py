@@ -12,10 +12,13 @@ project, please consult one of the team members.
 This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej Jaspal Capildeo.
 """
 from housing_entry import IndexData
+import plotly.express as px
 import parse
 import train_test_data
 import regression
 import evaluate_error
+import plot
+
 
 # load data
 data = parse.load_data('House_Price_Index.csv')
@@ -34,12 +37,29 @@ for location in tt_data:
     date_list = tt_data[location][0]['transaction_date'].to_list()
     index_list = tt_data[location][0]['index'].to_list()
     log_index_list = regression.natural_logarithm(index_list)
-    regression_dict[location] = regression.calculate_regression(date_list, log_index_list)
+    exp_regression_dict[location] = regression.calculate_regression(date_list, log_index_list)
 
-# plot interactive regression lines
+
+# plot figure of actual prices
+fig = px.line(tt_data['c11'][0], x="transaction_date", y="index", title="Unsorted Input")
+
+# plot interactive linear regression lines
 for location in regression_dict:
-    x_values = [i for i in range(0, 11386)]
-    y_values = [location[0] * x + location[1] for x in x_values]
+    # creates a dataframe for plotting
+    df = plot.df_linear_regression(regression_dict[location][0], regression_dict[location][1])
+
+    # plot both figs on same axis
+    fig.add_scatter(x=df['x'], y=df['y'], name="Linear: " + location)
+
+# plot interactive exponential regression lines
+for location in exp_regression_dict:
+    df = plot.df_exponential_regression(exp_regression_dict[location][0],
+                                        exp_regression_dict[location][1])
+
+    # plot both figs on same axis
+    fig.add_scatter(x=df['x'], y=df['y'], name="Exponential: " + location)
+
+fig.show()
 
 
 # get rmse_error for test data

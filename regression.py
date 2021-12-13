@@ -1,4 +1,4 @@
-"""DOCSTRING
+"""Regression: Functions used to find the relevant values for regression models
 
 Copyright and Usage Information
 ===============================
@@ -48,7 +48,8 @@ def calculate_days(current_date: datetime.date) -> int:
     return days_passed.days
 
 
-def calculate_regression(days_data: list[datetime.date], index_data: list[float]) -> tuple[float, float]:
+def calculate_regression(days_data: list[datetime.date], index_data: list[float]) -> tuple[float,
+                                                                                           float]:
     """Returns a tuple of the calculated least-squares regression slope and intercept
 
     Preconditions:
