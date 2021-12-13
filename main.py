@@ -29,7 +29,31 @@ for location in tt_data:
     regression_dict[location] = regression.least_squares_regression(tt_data[location][0])
 
 # get exponential regression line from train data:
+exp_regression_dict = {}
+for location in tt_data:
+    log_index_list = regression.natural_logarithm(tt_data[location][0])
+    exp_regression_dict[location] = regression.least_squares_regression(log_index_list)
 
+# plot figure of actual prices
+fig = px.line(tt_data['c11'][0], x="transaction_date", y="index", title="Unsorted Input")
+
+# plot interactive linear regression lines
+for location in regression_dict:
+    # creates a dataframe for plotting
+    df = plot.df_linear_regression(regression_dict[location][0], regression_dict[location][1])
+
+    # plot both figs on same axis
+    fig.add_scatter(x=df['x'], y=df['y'], name="Linear: " + location)
+
+# plot interactive exponential regression lines
+for location in exp_regression_dict:
+    df = plot.df_exponential_regression(exp_regression_dict[location][0],
+                                        exp_regression_dict[location][1])
+
+    # plot both figs on same axis
+    fig.add_scatter(x=df['x'], y=df['y'], name="Exponential: " + location)
+
+fig.show()
 
 # plot interactive regression lines
 for location in regression_dict:

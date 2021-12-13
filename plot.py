@@ -18,6 +18,32 @@ import pandas as pd
 import math
 from parse import load_data
 import regression
+import datetime
+
+no_of_days = [i for i in range(0, 11386)]
+x_values = [datetime.date.fromordinal(i) for i in range(726619, 738005)]
+
+
+def df_linear_regression(slope: float, intercept: float) -> pd.DataFrame:
+    """
+    Returns a dataframe with x and y values created by the linear regression model.
+    """
+    y_values = [slope * x + intercept for x in no_of_days]
+    df = pd.DataFrame()
+    df['x'] = x_values
+    df['y'] = y_values
+    return df
+
+
+def df_exponential_regression(slope: float, intercept: float) -> pd.DataFrame:
+    """
+    Returns a dataframe with x and y values created by the exponential regression model.
+    """
+    y_values = [math.exp((slope * x) + intercept) for x in no_of_days]
+    df = pd.DataFrame()
+    df['x'] = x_values
+    df['y'] = y_values
+    return df
 
 
 if __name__ == '__main__':
