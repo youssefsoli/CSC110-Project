@@ -17,18 +17,35 @@ from housing_entry import IndexData
 import pandas as pd
 
 
-def least_squares_regression(data: pd.DataFrame) -> tuple[float, float]:
+def least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
     """
     Return a tuple of the least squares regression slope
-    and intercept for data, a list of Index Data.
+    and intercept for df.
 
-    Preconditions:
-        - 'index' in data.columns
-        - 'transaction_date' in data.columns
+    >>> baseline = datetime.date(1990, 7, 1)
+    >>> days = [(baseline + datetime.timedelta(days=i)) for i in range(100)]
+
+    # Slope of 1.0
+    >>> indexes = list(range(100))
+    >>> calculate_regression(days, indexes)
+    (1.0, 0.0)
+
+    # Slope of 2.0
+    >>> indexes = list(range(0, 200, 2))
+    >>> calculate_regression(days, indexes)
+    (2.0, 0.0)
     """
-    days_data = data['transaction_date'].to_list()
-    index_data = data['index'].to_list()
-    slope, intercept = calculate_regression(days_data, index_data)
+    days_data = df['transaction_date'].to_list()
+    index_data = df['index'].to_list()
+
+    sigma_xy = sum(calculate_days(days_data[i]) * index_data[i] for i in range(len(days_data)))
+    sigma_x = sum(calculate_days(days) for days in days_data)
+    sigma_x_squared = sum((calculate_days(days) ** 2) for days in days_data)
+    sigma_y = sum(index_data)
+    n = len(days_data)
+
+    slope = ((n * sigma_xy) - (sigma_x * sigma_y)) / ((n * sigma_x_squared) - (sigma_x ** 2))
+    intercept = (sigma_y - slope * sigma_x) / n
     return (slope, intercept)
 
 
@@ -46,37 +63,6 @@ def calculate_days(current_date: datetime.date) -> int:
     baseline = datetime.date(1990, 7, 1)
     days_passed = current_date - baseline
     return days_passed.days
-
-
-def calculate_regression(days_data: list[datetime.date], index_data: list[float]) -> tuple[float, float]:
-    """Returns a tuple of the calculated least-squares regression slope and intercept
-
-    Preconditions:
-        - len(days_data) == len(index_data)
-        - len(days_data) > 0
-
-    >>> baseline = datetime.date(1990, 7, 1)
-    >>> days = [(baseline + datetime.timedelta(days=i)) for i in range(100)]
-
-    # Slope of 1.0
-    >>> indexes = list(range(100))
-    >>> calculate_regression(days, indexes)
-    (1.0, 0.0)
-
-    # Slope of 2.0
-    >>> indexes = list(range(0, 200, 2))
-    >>> calculate_regression(days, indexes)
-    (2.0, 0.0)
-    """
-    sigma_xy = sum(calculate_days(days_data[i]) * index_data[i] for i in range(len(days_data)))
-    sigma_x = sum(calculate_days(days) for days in days_data)
-    sigma_x_squared = sum((calculate_days(days) ** 2) for days in days_data)
-    sigma_y = sum(index_data)
-    n = len(days_data)
-
-    slope = ((n * sigma_xy) - (sigma_x * sigma_y))/((n * sigma_x_squared) - (sigma_x ** 2))
-    intercept = (sigma_y - slope * sigma_x) / n
-    return (slope, intercept)
 
 
 def natural_logarithm(data: list[IndexData]) -> list[IndexData]:
