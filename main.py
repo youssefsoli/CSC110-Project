@@ -29,12 +29,7 @@ for location in tt_data:
     regression_dict[location] = regression.least_squares_regression(tt_data[location][0])
 
 # get exponential regression line from train data:
-exp_regression_dict = {}
-for location in tt_data:
-    date_list = tt_data[location][0]['transaction_date'].to_list()
-    index_list = tt_data[location][0]['index'].to_list()
-    log_index_list = regression.natural_logarithm(index_list)
-    regression_dict[location] = regression.calculate_regression(date_list, log_index_list)
+
 
 # plot interactive regression lines
 for location in regression_dict:

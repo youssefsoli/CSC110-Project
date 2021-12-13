@@ -59,12 +59,14 @@ def get_train_test_data(housing_data: dict[str, list[IndexData]]) -> \
 
         # Generate training data for each location
         df = pd.DataFrame(housing_data[location])
+        df['transaction_date'] = pd.to_datetime(df['transaction_date'])
         train_data = df[~mask].dropna()
 
         test_data['transaction_date'] = \
-            test_data['transaction_date'].apply(datetime.date.fromordinal)
+            test_data['transaction_date'].dt.strftime('%m-%d-%Y')
+
         train_data['transaction_date'] = \
-            train_data['transaction_date'].apply(datetime.date.fromordinal)
+            train_data['transaction_date'].dt.strftime('%m-%d-%Y')
 
         train_test_data[location] = (train_data, test_data)
     return train_test_data
