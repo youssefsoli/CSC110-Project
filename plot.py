@@ -62,11 +62,13 @@ class Plot:
 
         train_rmse = evaluate_rmse(train_data['index'].to_list(), predicted_train)
         test_rmse = evaluate_rmse(test_data['index'].to_list(), predicted_test)
+        rmse_ratio = test_rmse / train_rmse
 
-        self._rmse[location]['linear'] = (train_rmse, test_rmse)
+        self._rmse[location]['linear'] = (train_rmse, test_rmse, rmse_ratio)
 
         self._fig.add_scatter(x=transaction_dates, y=indexes,
-                              name='Linear: ' + location, legendgrouptitle_text=location,
+                              name='Linear: ' + location + '<br>RMSE ratio: ' + str(rmse_ratio),
+                              legendgrouptitle_text=location,
                               legendgroup=location, line=dict(color="green"))
 
     def add_exponential_regression_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
@@ -84,11 +86,13 @@ class Plot:
 
         train_rmse = evaluate_rmse(train_data['index'].to_list(), predicted_train)
         test_rmse = evaluate_rmse(test_data['index'].to_list(), predicted_test)
+        rmse_ratio = test_rmse / train_rmse
 
-        self._rmse[location]['exponential'] = (train_rmse, test_rmse)
+        self._rmse[location]['exponential'] = (train_rmse, test_rmse, rmse_ratio)
 
         self._fig.add_scatter(x=transaction_dates, y=indexes,
-                              name='Exponential: ' + location, legendgrouptitle_text=location,
+                              name='Exponential: ' + location + '<br>RMSE ratio: ' + str(rmse_ratio),
+                              legendgrouptitle_text=location,
                               legendgroup=location, line=dict(color="yellow"))
 
     def add_svr_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
@@ -110,11 +114,13 @@ class Plot:
 
         train_rmse = evaluate_rmse(train_data['index'].to_list(), predicted_train)
         test_rmse = evaluate_rmse(test_data['index'].to_list(), predicted_test)
+        rmse_ratio = test_rmse / train_rmse
 
-        self._rmse[location]['svr'] = (train_rmse, test_rmse)
+        self._rmse[location]['svr'] = (train_rmse, test_rmse, rmse_ratio)
 
         self._fig.add_scatter(x=transaction_dates, y=indexes,
-                              name='SVR: ' + location, legendgrouptitle_text=location,
+                              name='SVR: ' + location + '<br>RMSE ratio: ' + str(rmse_ratio),
+                              legendgrouptitle_text=location,
                               legendgroup=location, line=dict(color="red"))
 
     def add_vline(self, date: datetime.date) -> None:
@@ -130,8 +136,8 @@ class Plot:
             row = (row % (len(self._rmse) // 3)) + 1
             col = (col % 3) + 1
             for reg_type in self._rmse[location]:
-                train_rmse, test_rmse = self._rmse[location][reg_type]
-                table.append([reg_type, train_rmse, test_rmse, test_rmse / train_rmse])
+                train_rmse, test_rmse, rmse_ratio = self._rmse[location][reg_type]
+                table.append([reg_type, train_rmse, test_rmse, rmse_ratio])
 
             # Transpose the 2D array for table order
             table = np.transpose(table)
