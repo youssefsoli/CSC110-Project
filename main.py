@@ -14,9 +14,7 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 
 import parse
 from train_test_data import get_train_test_data
-import regression
 import evaluate_error
-import plotly.graph_objs as go
 import pandas as pd
 from plot import Plot
 import datetime

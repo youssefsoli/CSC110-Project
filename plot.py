@@ -35,12 +35,22 @@ class Plot:
         self._fig = go.Figure(layout=layout)
 
     def add_raw_data_line(self, df: pd.DataFrame, location: str) -> None:
-        """Plots the raw data of a housing dataframe"""
+        """Plots the raw data of a housing dataframe.
+
+        Preconditions:
+        - 'transaction_date' in df.columns
+        - 'index' in df.columns
+        """
         self._fig.add_trace(go.Scatter(x=df["transaction_date"], y=df["index"],
                                        name=location, legendgroup="Raw Data"))
 
     def add_linear_regression_line(self, df: pd.DataFrame, location: str, size: int) -> None:
-        """Adds the linear regression of the given dataframe"""
+        """Adds the linear regression line of the given dataframe.
+
+        Preconditions:
+        - 'calculated_days' in df.columns
+        - 'index' in df.columns
+        """
         slope, intercept = regression.linear_least_squares_regression(df)
 
         transaction_dates = [parse.days_to_date(day) for day in range(size + 1)]
@@ -50,7 +60,12 @@ class Plot:
                               name=location, legendgroup="Linear Regression")
 
     def add_exponential_regression_line(self, df: pd.DataFrame, location: str, size: int) -> None:
-        """Adds the exponential regression of the given dataframe"""
+        """Adds the exponential regression line of the given dataframe.
+
+        Preconditions:
+        - 'calculated_days' in df.columns
+        - 'index' in df.columns
+        """
         slope, intercept = regression.exponential_least_squares_regression(df)
 
         transaction_dates = [parse.days_to_date(day) for day in range(size + 1)]
@@ -60,9 +75,9 @@ class Plot:
                               name=location, legendgroup="Exponential Regression")
 
     def add_vline(self, date: datetime.date) -> None:
-        """Adds a vertical line at the specified date"""
+        """Adds a vertical line at the specified date."""
         self._fig.add_vline(x=date)
 
     def show(self) -> None:
-        """Displays the plot to a new browser window"""
+        """Displays the plot to a new browser window."""
         self._fig.show()

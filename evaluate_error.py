@@ -20,6 +20,10 @@ def evaluate_rmse_manual_regression(data: pd.DataFrame,
     """
     Returns the Root Mean Square Error value of the given data with the regression line.
 
+    Preconditions:
+      - 'calculated_days' in df.columns
+      - 'index' in df.columns
+
     >>> lst = [1, 2, 3, 4]
     >>> df = pd.DataFrame({'calculated_days': lst, 'index': lst})
     >>> equation = 1, 0
@@ -51,7 +55,6 @@ def get_rmse_for_dataset(dataset: dict, regression_dict: dict, is_test: bool) ->
 
     is_test = False returns RMSE values of the training dataset, and is_test = True returns the
     RMSE values of the test dataset.
-
     """
 
     # accumulator
