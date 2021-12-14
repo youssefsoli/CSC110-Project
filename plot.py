@@ -87,14 +87,14 @@ class Plot:
         x_test = test_data[['sales_pair_count', 'calculated_days']].to_numpy()
 
         poly_svr.fit(x_train, y_train)
-        train_preds = poly_svr.predict(x_train)
-        test_preds = poly_svr.predict(x_test)
+        predicted_train = poly_svr.predict(x_train)
+        predicted_test = poly_svr.predict(x_test)
 
         transaction_dates = pd.concat([train_data['transaction_date'], test_data['transaction_date']])
-        indexes = np.concatenate([train_preds, test_preds])
+        indexes = np.concatenate([predicted_train, predicted_test])
 
-        train_rmse = evaluate_rmse(train_data['index'].to_list(), train_preds)
-        test_rmse = evaluate_rmse(test_data['index'].to_list(), test_preds)
+        train_rmse = evaluate_rmse(train_data['index'].to_list(), predicted_train)
+        test_rmse = evaluate_rmse(test_data['index'].to_list(), predicted_test)
         print(train_rmse, test_rmse)
 
         self._fig.add_scatter(x=transaction_dates, y=indexes,
