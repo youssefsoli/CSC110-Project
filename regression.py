@@ -1,4 +1,4 @@
-"""DOCSTRING
+"""Regression: This file is used to derive the least squares regression lines.
 
 Copyright and Usage Information
 ===============================
@@ -13,7 +13,6 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 """
 import datetime
 import math
-from housing_entry import IndexData
 import pandas as pd
 
 
@@ -27,7 +26,7 @@ def least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
                             (baseline + datetime.timedelta(days = 1)).strftime('%m-%d-%Y'), \
                             (baseline + datetime.timedelta(days = 2)).strftime('%m-%d-%Y'), \
                             (baseline + datetime.timedelta(days = 3)).strftime('%m-%d-%Y'), \
-                            (baseline + datetime.timedelta(dayss = 4)).strftime('%m-%d-%Y')]
+                            (baseline + datetime.timedelta(days = 4)).strftime('%m-%d-%Y')]
     >>> index = list(range(5))
     >>> dataframe = pd.DataFrame({'transaction_date': transaction_date, 'index': index})
     >>> least_squares_regression(dataframe)
@@ -66,9 +65,15 @@ def calculate_days(current_date: str) -> int:
 
 def natural_logarithm(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Return a list with the natural logarithm applied to all values in data.
+    Return a dataframe with the natural logarithm applied to all index values in df.
+
+    >>> index = list(range(1, 5))
+    >>> dataframe = pd.DataFrame({'index': index})
+    >>> log_df = natural_logarithm(dataframe)
+    >>> lst = log_df['index'].to_list()
+    >>> lst == [math.log(i) for i in range(1, 5)]
+    True
     """
     index_data = df['index'].to_list()
     df['index'] = [math.log(entry) for entry in index_data]
-
     return df
