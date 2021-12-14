@@ -75,7 +75,7 @@ class Plot:
     def add_exponential_regression_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
                                         location: str, size: int) -> None:
         """Adds the exponential regression of the given dataframe with its RMSE"""
-        slope, intercept = regression.exponential_least_squares_regression(train_data)
+        slope, intercept = regression.exp_least_squares_regression(train_data)
 
         start_day = train_data['calculated_days'].iloc[0]
 

@@ -11,8 +11,8 @@ project, please consult one of the team members.
 
 This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej Jaspal Capildeo.
 """
-import datetime
 import math
+import python_ta
 import pandas as pd
 
 
@@ -36,7 +36,7 @@ def linear_least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
     return calculate_regression(days_data, index_data)
 
 
-def exponential_least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
+def exp_least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
     """
     Return a tuple of the least squares regression slope
     and intercept for the housing price dataframe.
@@ -48,7 +48,7 @@ def exponential_least_squares_regression(df: pd.DataFrame) -> tuple[float, float
     >>> lst = [1, 2, 3, 4]
     >>> exp_list = [math.exp(i) for i in range(1, 5)]
     >>> df = pd.DataFrame({'calculated_days': lst, 'index': exp_list})
-    >>> exponential_least_squares_regression(df)
+    >>> exp_least_squares_regression(df)
     (1.0, 0.0)
     """
     days_data = df['calculated_days'].to_list()
@@ -98,3 +98,12 @@ def natural_logarithm(data: list) -> list[float]:
     [1.0, 0.0]
     """
     return [math.log(entry) for entry in data]
+
+
+if __name__ == '__main__':
+    python_ta.check_all(config={
+        'extra-imports': ['numpy', 'pandas', 'math'],  # the names (strs) of imported modules
+        'allowed-io': [],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
