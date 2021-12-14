@@ -16,6 +16,7 @@ plotly
 pandas
 datetime
 csv
+numpy
 
 # Machine learning library
 sklearn
