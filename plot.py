@@ -26,8 +26,12 @@ from evaluate_error import evaluate_rmse
 class Plot:
     """
     A wrapper for a plotly graph object
-    """
 
+    Representation Invariants:
+        - set(self._rmse.keys()) == {'c11', 'bc_victoria', 'bc_vancouver', 'ab_calgary', \
+        'ab_edmonton','ab_winnipeg', 'on_hamilton', 'on_toronto', 'on_ottawa', 'qc_montreal', \
+        'qc_quebec', 'ns_halifax'}
+    """
     _fig: go.Figure
     _rmse: dict
     _rmse_fig: go.Figure
