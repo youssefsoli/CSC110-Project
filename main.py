@@ -72,11 +72,12 @@ for location in exp_regression_dict:
 
 # label axis of graph
 fig.update_layout(
-    title="Scatterplot of housing index of base year 2005 to date",
+    title="Scatterplot of housing price index against date",
     xaxis_title="date",
     yaxis_title="index",
     legend_title="Location",
 )
+fig.update_traces(line=dict(width=1))
 
 fig.show()
 
