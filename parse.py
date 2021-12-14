@@ -14,6 +14,7 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 
 import csv
 import datetime
+import python_ta
 import pandas as pd
 
 from housing_entry import IndexData
@@ -117,4 +118,10 @@ def add_calculated_days(df: pd.DataFrame) -> None:
 
 
 if __name__ == '__main__':
-    print(load_data('House_Price_Index.csv')['c11'][5])
+    python_ta.check_all(config={
+        'extra-imports': ['csv', 'datetime',
+                          'pandas', 'housing_entry'],  # the names (strs) of imported modules
+        'allowed-io': ['load_data'],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
