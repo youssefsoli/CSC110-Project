@@ -94,7 +94,17 @@ class Plot:
 
     def add_exponential_regression_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
                                         location: str, size: int) -> None:
-        """Adds the exponential regression of the given dataframe with its RMSE"""
+        """
+        Adds the exponential regression of the given dataframe with its RMSE
+
+        Preconditions:
+        - !train_data.empty()
+        - !test_data.empty()
+        - location in {'c11', 'bc_victoria', 'bc_vancouver', 'ab_calgary', 'ab_edmonton', \
+        'ab_winnipeg', 'on_hamilton', 'on_toronto', 'on_ottawa', 'qc_montreal', 'qc_quebec', \
+        'ns_halifax'}
+        - size > 0
+        """
         slope, intercept = regression.exp_least_squares_regression(train_data)
 
         start_day = train_data['calculated_days'].iloc[0]
@@ -121,7 +131,16 @@ class Plot:
 
     def add_svr_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
                      location: str) -> None:
-        """Adds the SV regression of the given test data with its RMSE"""
+        """
+        Adds the SV regression of the given test data with its RMSE
+
+        Preconditions:
+        - !train_data.empty()
+        - !test_data.empty()
+        - location in {'c11', 'bc_victoria', 'bc_vancouver', 'ab_calgary', 'ab_edmonton', \
+        'ab_winnipeg', 'on_hamilton', 'on_toronto', 'on_ottawa', 'qc_montreal', 'qc_quebec', \
+        'ns_halifax'}
+        """
         poly_svr = SVR(kernel='poly', C=1000, degree=2)
 
         x_train = train_data[['sales_pair_count', 'calculated_days']].to_numpy()
@@ -149,7 +168,12 @@ class Plot:
                               legendgroup=location, line=dict(color="red"))
 
     def add_vline(self, date: datetime.date) -> None:
-        """Adds a vertical line at the specified date"""
+        """
+        Adds a vertical line at the specified date
+
+        Preconditions:
+        - date >= datetime.date(1990, 7, 1)
+        """
         self._fig.add_vline(x=date)
 
     def add_rmse_table(self) -> None:
