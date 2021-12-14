@@ -89,7 +89,7 @@ def days_to_date(days: int) -> datetime.date:
     """Return the datetime.date from the days from Jul 1990
 
     Preconditions:
-        - days > 0
+        - days >= 0
 
     >>> days_to_date(calculate_days(datetime.date(1990, 7, 1))) == datetime.date(1990, 7, 1)
     True

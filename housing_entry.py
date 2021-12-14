@@ -25,7 +25,13 @@ class IndexData:
       - transaction_date: the year and month of the observation
       - index: the house price index
       - sales_pair_count: the number of houses used to calculate index
+
+    Representation Invariants:
+      - self.transaction_date >= datetime.date(1990,7,1)
+      - self.index > 0
+      - self.sales_pair_count >= 0
     """
+
     transaction_date: datetime.date
     index: float
     sales_pair_count: int
