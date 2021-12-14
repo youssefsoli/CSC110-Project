@@ -29,23 +29,23 @@ class Plot:
     """
 
     def __init__(self, layout: dict, locations: list[str]) -> None:
-        self._fig = make_subplots(
-            rows=len(locations) + 1, cols=1,
-            shared_xaxes=True,
-            vertical_spacing=0.03,
-            specs=[[{"type": "scatter"}]] +
-                  [[{"type": "table"}]] * len(locations))
+        self._fig = go.Figure()
         self._fig.update_layout(layout)
         self._rmse = {}
         for location in locations:
             self._rmse[location] = {}
+        self._rmse_fig = make_subplots(
+            rows=len(locations)//3, cols=3,
+            subplot_titles=locations,
+            shared_xaxes=True,
+            vertical_spacing=0.03,
+            specs=[[{"type": "table"}] * 3] * (len(locations) // 3))
 
     def add_raw_data_line(self, df: pd.DataFrame, location: str) -> None:
         """Plots the raw data of a housing dataframe"""
         self._fig.add_trace(go.Scatter(x=df["transaction_date"], y=df["index"],
                                        name=location, legendgroup=location,
-                                       line=dict(color="blue")),
-                            row=1, col=1)
+                                       line=dict(color="blue")))
 
     def add_linear_regression_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
                                    location: str, size: int) -> None:
@@ -67,8 +67,7 @@ class Plot:
 
         self._fig.add_scatter(x=transaction_dates, y=indexes,
                               name='Linear: ' + location, legendgrouptitle_text=location,
-                              legendgroup=location, line=dict(color="green"),
-                              row=1, col=1)
+                              legendgroup=location, line=dict(color="green"))
 
     def add_exponential_regression_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
                                         location: str, size: int) -> None:
@@ -90,8 +89,7 @@ class Plot:
 
         self._fig.add_scatter(x=transaction_dates, y=indexes,
                               name='Exponential: ' + location, legendgrouptitle_text=location,
-                              legendgroup=location, line=dict(color="yellow"),
-                              row=1, col=1)
+                              legendgroup=location, line=dict(color="yellow"))
 
     def add_svr_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
                      location: str) -> None:
@@ -117,29 +115,30 @@ class Plot:
 
         self._fig.add_scatter(x=transaction_dates, y=indexes,
                               name='SVR: ' + location, legendgrouptitle_text=location,
-                              legendgroup=location, line=dict(color="red"),
-                              row=1, col=1)
+                              legendgroup=location, line=dict(color="red"))
 
     def add_vline(self, date: datetime.date) -> None:
         """Adds a vertical line at the specified date"""
-        self._fig.add_vline(x=date, row=1, col=1)
+        self._fig.add_vline(x=date)
 
     def add_rmse_table(self) -> None:
         """Adds a table with RMSE values"""
-        row = 1
+        row = 0
+        col = 0
         for location in self._rmse:
             table = []
-            row += 1
+            row = (row % (len(self._rmse) // 3)) + 1
+            col = (col % 3) + 1
             for reg_type in self._rmse[location]:
                 train_rmse, test_rmse = self._rmse[location][reg_type]
                 table.append([reg_type, train_rmse, test_rmse, test_rmse / train_rmse])
 
+            # Transpose the 2D array for table order
             table = np.transpose(table)
 
-            self._fig.add_trace(
+            self._rmse_fig.add_trace(
                 go.Table(
                     header=dict(
-                        prefix=location,
                         values=["Regression Type", "Train RMSE", "Test RMSE", "RMSE Ratio"],
                         font=dict(size=10),
                         align="center"
@@ -148,9 +147,10 @@ class Plot:
                         values=table,
                         align="left")
                 ),
-                row=row, col=1
+                row=row, col=col
             )
 
     def show(self) -> None:
         """Displays the plot to a new browser window"""
         self._fig.show()
+        self._rmse_fig.show()

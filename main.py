@@ -46,14 +46,14 @@ if __name__ == '__main__':
         # Plot the location's raw housing data
         plot.add_raw_data_line(location_df, location)
 
+        # Add the SV regression line from the train data
+        plot.add_svr_line(train_data, test_data, location)
+
         # Add the linear regression line from the train data
         plot.add_linear_regression_line(train_data, test_data, location, num_days)
 
         # Add the exponential regression line from the train data
         plot.add_exponential_regression_line(train_data, test_data, location, num_days)
-
-        # Add the SV regression line from the train data
-        plot.add_svr_line(train_data, test_data, location)
 
     # Add a vertical line from 2020 onwards (COVID comes into play)
     plot.add_vline(datetime.date(2020, 1, 1))
