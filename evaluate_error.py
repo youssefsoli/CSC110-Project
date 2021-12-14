@@ -11,6 +11,7 @@ project, please consult one of the team members.
 
 This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej Jaspal Capildeo.
 """
+import python_ta
 
 
 def evaluate_rmse(actual: list[float], predicted: list[float]) -> float:
@@ -52,3 +53,12 @@ def evaluate_mae(actual: list[float], predicted: list[float]) -> float:
         absolute_error_sum += abs(predicted[i] - actual[i])
 
     return absolute_error_sum / n
+
+
+if __name__ == '__main__':
+    python_ta.check_all(config={
+        'extra-imports': [],  # the names (strs) of imported modules
+        'allowed-io': [],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
