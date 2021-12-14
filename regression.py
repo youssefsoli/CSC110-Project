@@ -23,17 +23,15 @@ def least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
     and intercept for df.
 
     >>> baseline = datetime.date(1990, 7, 1)
-    >>> days = [(baseline + datetime.timedelta(days=i)) for i in range(100)]
-
-    # Slope of 1.0
-    >>> indexes = list(range(100))
-    >>> calculate_regression(days, indexes)
+    >>> transaction_date = [(baseline + datetime.timedelta(days = 0)).strftime('%m-%d-%Y'), \
+                            (baseline + datetime.timedelta(days = 1)).strftime('%m-%d-%Y'), \
+                            (baseline + datetime.timedelta(days = 2)).strftime('%m-%d-%Y'), \
+                            (baseline + datetime.timedelta(days = 3)).strftime('%m-%d-%Y'), \
+                            (baseline + datetime.timedelta(dayss = 4)).strftime('%m-%d-%Y')]
+    >>> index = list(range(5))
+    >>> dataframe = pd.DataFrame({'transaction_date': transaction_date, 'index': index})
+    >>> least_squares_regression(dataframe)
     (1.0, 0.0)
-
-    # Slope of 2.0
-    >>> indexes = list(range(0, 200, 2))
-    >>> calculate_regression(days, indexes)
-    (2.0, 0.0)
     """
     days_data = df['transaction_date'].to_list()
     index_data = df['index'].to_list()
@@ -74,4 +72,3 @@ def natural_logarithm(df: pd.DataFrame) -> pd.DataFrame:
     df['index'] = [math.log(entry) for entry in index_data]
 
     return df
-
