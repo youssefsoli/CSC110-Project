@@ -11,15 +11,16 @@ project, please consult one of the team members.
 
 This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej Jaspal Capildeo.
 """
+import math
+import datetime
+import python_ta
 import numpy as np
 from plotly.subplots import make_subplots
 from sklearn.svm import SVR
 import plotly.graph_objs as go
 import pandas as pd
-import math
 import parse
 import regression
-import datetime
 from evaluate_error import evaluate_rmse
 
 
@@ -35,7 +36,7 @@ class Plot:
         for location in locations:
             self._rmse[location] = {}
         self._rmse_fig = make_subplots(
-            rows=len(locations)//3, cols=3,
+            rows=len(locations) // 3, cols=3,
             subplot_titles=locations,
             shared_xaxes=True,
             vertical_spacing=0.03,
@@ -81,8 +82,10 @@ class Plot:
         transaction_dates = [parse.days_to_date(day) for day in range(start_day, size + 1)]
         indexes = [math.exp((slope * day) + intercept) for day in range(start_day, size + 1)]
 
-        predicted_train = [math.exp((slope * day) + intercept) for day in train_data['calculated_days']]
-        predicted_test = [math.exp((slope * day) + intercept) for day in test_data['calculated_days']]
+        predicted_train = [math.exp((slope * day) + intercept)
+                           for day in train_data['calculated_days']]
+        predicted_test = [math.exp((slope * day) + intercept)
+                          for day in test_data['calculated_days']]
 
         train_rmse = evaluate_rmse(train_data['index'].to_list(), predicted_train)
         test_rmse = evaluate_rmse(test_data['index'].to_list(), predicted_test)
@@ -91,7 +94,8 @@ class Plot:
         self._rmse[location]['exponential'] = (train_rmse, test_rmse, rmse_ratio)
 
         self._fig.add_scatter(x=transaction_dates, y=indexes,
-                              name='Exponential: ' + location + '<br>RMSE ratio: ' + str(rmse_ratio),
+                              name='Exponential: ' + location
+                                   + '<br>RMSE ratio: ' + str(rmse_ratio),
                               legendgrouptitle_text=location,
                               legendgroup=location, line=dict(color="yellow"))
 
@@ -109,7 +113,8 @@ class Plot:
         predicted_train = poly_svr.predict(x_train)
         predicted_test = poly_svr.predict(x_test)
 
-        transaction_dates = pd.concat([train_data['transaction_date'], test_data['transaction_date']])
+        transaction_dates = pd.concat([train_data['transaction_date'],
+                                       test_data['transaction_date']])
         indexes = np.concatenate([predicted_train, predicted_test])
 
         train_rmse = evaluate_rmse(train_data['index'].to_list(), predicted_train)
@@ -160,3 +165,15 @@ class Plot:
         """Displays the plot to a new browser window"""
         self._fig.show()
         self._rmse_fig.show()
+
+
+if __name__ == '__main__':
+    python_ta.check_all(config={
+        'extra-imports': ['numpy', 'plotly.subplots',
+                          'pandas', 'math', 'plotly.graph_objs',
+                          'sklearn.svm', 'parse', 'regression',
+                          'datetime', 'evaluate_error'],  # the names (strs) of imported modules
+        'allowed-io': [],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
