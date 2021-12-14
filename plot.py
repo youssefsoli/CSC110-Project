@@ -12,6 +12,7 @@ project, please consult one of the team members.
 This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej Jaspal Capildeo.
 """
 import numpy as np
+from plotly.subplots import make_subplots
 from sklearn.svm import SVR
 import plotly.graph_objs as go
 import pandas as pd
@@ -27,14 +28,24 @@ class Plot:
     A wrapper for a plotly graph object
     """
 
-    def __init__(self, layout: dict) -> None:
-        self._fig = go.Figure(layout=layout)
+    def __init__(self, layout: dict, locations: list[str]) -> None:
+        self._fig = make_subplots(
+            rows=len(locations) + 1, cols=1,
+            shared_xaxes=True,
+            vertical_spacing=0.03,
+            specs=[[{"type": "scatter"}]] +
+                  [[{"type": "table"}]] * len(locations))
+        self._fig.update_layout(layout)
+        self._rmse = {}
+        for location in locations:
+            self._rmse[location] = {}
 
     def add_raw_data_line(self, df: pd.DataFrame, location: str) -> None:
         """Plots the raw data of a housing dataframe"""
         self._fig.add_trace(go.Scatter(x=df["transaction_date"], y=df["index"],
                                        name=location, legendgroup=location,
-                                       line=dict(color="blue")))
+                                       line=dict(color="blue")),
+                            row=1, col=1)
 
     def add_linear_regression_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
                                    location: str, size: int) -> None:
@@ -52,9 +63,12 @@ class Plot:
         train_rmse = evaluate_rmse(train_data['index'].to_list(), predicted_train)
         test_rmse = evaluate_rmse(test_data['index'].to_list(), predicted_test)
 
+        self._rmse[location]['linear'] = (train_rmse, test_rmse)
+
         self._fig.add_scatter(x=transaction_dates, y=indexes,
                               name='Linear: ' + location, legendgrouptitle_text=location,
-                              legendgroup=location, line=dict(color="green"))
+                              legendgroup=location, line=dict(color="green"),
+                              row=1, col=1)
 
     def add_exponential_regression_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
                                         location: str, size: int) -> None:
@@ -72,9 +86,12 @@ class Plot:
         train_rmse = evaluate_rmse(train_data['index'].to_list(), predicted_train)
         test_rmse = evaluate_rmse(test_data['index'].to_list(), predicted_test)
 
+        self._rmse[location]['exponential'] = (train_rmse, test_rmse)
+
         self._fig.add_scatter(x=transaction_dates, y=indexes,
                               name='Exponential: ' + location, legendgrouptitle_text=location,
-                              legendgroup=location, line=dict(color="yellow"))
+                              legendgroup=location, line=dict(color="yellow"),
+                              row=1, col=1)
 
     def add_svr_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
                      location: str) -> None:
@@ -95,15 +112,44 @@ class Plot:
 
         train_rmse = evaluate_rmse(train_data['index'].to_list(), predicted_train)
         test_rmse = evaluate_rmse(test_data['index'].to_list(), predicted_test)
-        print(train_rmse, test_rmse)
+
+        self._rmse[location]['svr'] = (train_rmse, test_rmse)
 
         self._fig.add_scatter(x=transaction_dates, y=indexes,
                               name='SVR: ' + location, legendgrouptitle_text=location,
-                              legendgroup=location, line=dict(color="red"))
+                              legendgroup=location, line=dict(color="red"),
+                              row=1, col=1)
 
     def add_vline(self, date: datetime.date) -> None:
         """Adds a vertical line at the specified date"""
-        self._fig.add_vline(x=date)
+        self._fig.add_vline(x=date, row=1, col=1)
+
+    def add_rmse_table(self) -> None:
+        """Adds a table with RMSE values"""
+        row = 1
+        for location in self._rmse:
+            table = []
+            row += 1
+            for reg_type in self._rmse[location]:
+                train_rmse, test_rmse = self._rmse[location][reg_type]
+                table.append([reg_type, train_rmse, test_rmse, test_rmse / train_rmse])
+
+            table = np.transpose(table)
+
+            self._fig.add_trace(
+                go.Table(
+                    header=dict(
+                        prefix=location,
+                        values=["Regression Type", "Train RMSE", "Test RMSE", "RMSE Ratio"],
+                        font=dict(size=10),
+                        align="center"
+                    ),
+                    cells=dict(
+                        values=table,
+                        align="left")
+                ),
+                row=row, col=1
+            )
 
     def show(self) -> None:
         """Displays the plot to a new browser window"""

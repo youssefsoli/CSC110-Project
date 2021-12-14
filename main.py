@@ -14,8 +14,7 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 
 import parse
 from train_test_data import get_train_test_data
-import regression
-import evaluate_error
+from plot_geo import GeoPlot
 import pandas as pd
 from plot import Plot
 import datetime
@@ -33,7 +32,7 @@ if __name__ == '__main__':
         'xaxis_title': "Date",
         'yaxis_title': "Index",
         'legend_title': "Location"
-    })
+    }, list(housing_data.keys()))
 
     for location in housing_data:
         location_df = pd.DataFrame(housing_data[location])
@@ -59,5 +58,12 @@ if __name__ == '__main__':
     # Add a vertical line from 2020 onwards (COVID comes into play)
     plot.add_vline(datetime.date(2020, 1, 1))
 
+    # Add the RMSE tables
+    plot.add_rmse_table()
+
     # Display the plot
     plot.show()
+
+    # Show the heatmap overtime of each location
+    geoPlot = GeoPlot(location_dfs)
+    geoPlot.show()

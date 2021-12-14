@@ -1,4 +1,4 @@
-"""DOCSTRING
+"""Regression: This file handles all of the regression calculations
 
 Copyright and Usage Information
 ===============================
