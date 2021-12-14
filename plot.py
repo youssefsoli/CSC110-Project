@@ -29,6 +29,10 @@ class Plot:
     A wrapper for a plotly graph object
     """
 
+    _fig: go.Figure
+    _rmse: dict
+    _rmse_fig: go.Figure
+
     def __init__(self, layout: dict, locations: list[str]) -> None:
         self._fig = go.Figure()
         self._fig.update_layout(layout)
@@ -43,14 +47,31 @@ class Plot:
             specs=[[{"type": "table"}] * 3] * (len(locations) // 3))
 
     def add_raw_data_line(self, df: pd.DataFrame, location: str) -> None:
-        """Plots the raw data of a housing dataframe"""
+        """
+        Plots the raw data of a housing dataframe
+
+        Preconditions:
+        - !df.empty()
+        - location in {'c11', 'bc_victoria', 'bc_vancouver', 'ab_calgary', 'ab_edmonton', \
+        'ab_winnipeg', 'on_hamilton', 'on_toronto', 'on_ottawa', 'qc_montreal', 'qc_quebec', \
+        'ns_halifax'}
+        """
         self._fig.add_trace(go.Scatter(x=df["transaction_date"], y=df["index"],
                                        name=location, legendgroup=location,
                                        line=dict(color="blue")))
 
     def add_linear_regression_line(self, train_data: pd.DataFrame, test_data: pd.DataFrame,
                                    location: str, size: int) -> None:
-        """Adds the linear regression of the given dataframe with its RMSE"""
+        """
+        Adds the linear regression of the given dataframe with its RMSE
+
+        Preconditions:
+        - !train_data.empty()
+        - !test_data.empty()
+        - location in {'c11', 'bc_victoria', 'bc_vancouver', 'ab_calgary', 'ab_edmonton', \
+        'ab_winnipeg', 'on_hamilton', 'on_toronto', 'on_ottawa', 'qc_montreal', 'qc_quebec', \
+        'ns_halifax'}
+        """
         slope, intercept = regression.linear_least_squares_regression(train_data)
 
         start_day = train_data['calculated_days'].iloc[0]
