@@ -15,6 +15,7 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 
 import plotly.express as px
 import pandas as pd
+
 from city_coords import COORDS
 
 
@@ -53,3 +54,20 @@ class GeoPlot:
     def show(self) -> None:
         """Displays the geo plot to a new browser window"""
         self._fig.show()
+
+
+if __name__ == '__main__':
+    import python_ta
+    python_ta.check_all(config={
+        'extra-imports': ['city_coords',
+                          'plotly.express', 'pandas'],  # the names (strs) of imported modules
+        'allowed-io': [],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
+
+    import python_ta.contracts
+    python_ta.contracts.check_all_contracts()
+
+    import doctest
+    doctest.testmod()

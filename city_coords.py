@@ -26,3 +26,12 @@ COORDS = {
     'qc_quebec_city': (46.829853, -71.254028),
     'ns_halifax': (44.651070, -63.582687)
 }
+
+if __name__ == '__main__':
+    import python_ta
+    python_ta.check_all(config={
+        'extra-imports': [],  # the names (strs) of imported modules
+        'allowed-io': [],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })

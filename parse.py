@@ -106,15 +106,22 @@ def add_calculated_days(df: pd.DataFrame) -> None:
 
     Preconditions:
         - 'transaction_date' in df.columns
-
-    >>> df = pd.DataFrame({'transaction_date': [datetime.date(1990, 7, 1), \
-     datetime.date(1991, 7, 1)]})
-    >>> add_calculated_days(df)
-    >>> df['calculated_days'].to_list() == [0, 365]
-    True
     """
     df['calculated_days'] = df['transaction_date'].apply(calculate_days)
 
 
 if __name__ == '__main__':
-    print(load_data('House_Price_Index.csv')['c11'][5])
+    import python_ta
+    python_ta.check_all(config={
+        'extra-imports': ['csv', 'datetime',
+                          'pandas', 'housing_entry'],  # the names (strs) of imported modules
+        'allowed-io': ['load_data'],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
+
+    import python_ta.contracts
+    python_ta.contracts.check_all_contracts()
+
+    import doctest
+    doctest.testmod()

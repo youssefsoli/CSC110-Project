@@ -52,3 +52,19 @@ def evaluate_mae(actual: list[float], predicted: list[float]) -> float:
         absolute_error_sum += abs(predicted[i] - actual[i])
 
     return absolute_error_sum / n
+
+
+if __name__ == '__main__':
+    import python_ta
+    python_ta.check_all(config={
+        'extra-imports': [],  # the names (strs) of imported modules
+        'allowed-io': [],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
+
+    import python_ta.contracts
+    python_ta.contracts.check_all_contracts()
+
+    import doctest
+    doctest.testmod()
