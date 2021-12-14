@@ -18,6 +18,12 @@ def evaluate_rmse(actual: list[float], predicted: list[float]) -> float:
 
     Preconditions:
         - len(actual) == len(predicted)
+        - len(actual) != 0
+        - len(predicted) != 0
+
+    >>> evaluate_rmse([11, 22, 33], [10, 20, 30])
+    2.160246899469287
+
     """
     n = len(actual)
     squared_error_sum = 0
@@ -33,6 +39,11 @@ def evaluate_mae(actual: list[float], predicted: list[float]) -> float:
 
     Preconditions:
         - len(actual) == len(predicted)
+        - len(actual) != 0
+        - len(predicted) != 0
+
+        >>> evaluate_mae([11, 22, 33], [10, 20, 30])
+        2.0
     """
     n = len(actual)
     absolute_error_sum = 0
