@@ -58,6 +58,7 @@ class Plot:
         - location in {'c11', 'bc_victoria', 'bc_vancouver', 'ab_calgary', 'ab_edmonton', \
         'ab_winnipeg', 'on_hamilton', 'on_toronto', 'on_ottawa', 'qc_montreal', 'qc_quebec', \
         'ns_halifax'}
+        - 'transaction_date' in df.columns
         """
         self._fig.add_trace(go.Scatter(x=df["transaction_date"], y=df["index"],
                                        name=location, legendgroup=location,
@@ -74,6 +75,10 @@ class Plot:
         - location in {'c11', 'bc_victoria', 'bc_vancouver', 'ab_calgary', 'ab_edmonton', \
         'ab_winnipeg', 'on_hamilton', 'on_toronto', 'on_ottawa', 'qc_montreal', 'qc_quebec', \
         'ns_halifax'}
+        - 'calculated_days' in train_data.columns
+        - 'index' in train_data.columns
+        - 'calculated_days' in test_data.columns
+        - 'index' in test_data.columns
         """
         slope, intercept = regression.linear_least_squares_regression(train_data)
 
@@ -108,6 +113,10 @@ class Plot:
         'ab_winnipeg', 'on_hamilton', 'on_toronto', 'on_ottawa', 'qc_montreal', 'qc_quebec', \
         'ns_halifax'}
         - size > 0
+        - 'calculated_days' in train_data.columns
+        - 'index' in train_data.columns
+        - 'calculated_days' in test_data.columns
+        - 'index' in test_data.columns
         """
         slope, intercept = regression.exp_least_squares_regression(train_data)
 
@@ -144,6 +153,10 @@ class Plot:
         - location in {'c11', 'bc_victoria', 'bc_vancouver', 'ab_calgary', 'ab_edmonton', \
         'ab_winnipeg', 'on_hamilton', 'on_toronto', 'on_ottawa', 'qc_montreal', 'qc_quebec', \
         'ns_halifax'}
+        all(col_name in test_data.columns for col_name in \
+        ['sales_pair_count', 'calculated_days', 'index'])
+        all(col_name in train_data.columns for col_name in \
+        ['sales_pair_count', 'calculated_days', 'index'])
         """
         poly_svr = SVR(kernel='poly', C=1000, degree=2)
 

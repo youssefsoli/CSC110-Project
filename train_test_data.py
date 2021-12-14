@@ -22,6 +22,7 @@ def get_train_test_data(df: pd.DataFrame) -> \
 
     Preconditions:
       - 'transaction_date' in df.columns
+      - !df.empty()
     """
 
     # Generate test and train data for each location
