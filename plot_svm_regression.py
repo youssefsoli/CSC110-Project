@@ -16,9 +16,8 @@ import datetime
 import plotly.express as px
 import plotly.graph_objs as go
 import pandas as pd
-from parse import load_data
+from parse import load_data, calculate_days, add_calculated_days
 from train_test_data import get_train_test_data
-from regression import calculate_days
 from sklearn.svm import SVR
 
 # if __name__ == '__main__':
@@ -55,18 +54,17 @@ from sklearn.svm import SVR
 
 if __name__ == '__main__':
     housing_data = load_data('House_Price_Index.csv')
-    # housing_data = pd.DataFrame(housing_data['c11'])
+    housing_data = pd.DataFrame(housing_data['c11'])
 
     poly_svr = SVR(kernel='poly', C=1000, degree=2)
 
-    train_data, test_data = get_train_test_data(housing_data)['c11']
+    add_calculated_days(housing_data)
+    train_data, test_data = get_train_test_data(housing_data)
 
-    train_data['transaction_date'] = train_data['transaction_date'].apply(calculate_days)
-    x_train = train_data[['sales_pair_count', 'transaction_date']].to_numpy()
+    x_train = train_data[['sales_pair_count', 'calculated_days']].to_numpy()
     y_train = train_data['index']
 
-    test_data['transaction_date'] = test_data['transaction_date'].apply(calculate_days)
-    x_test = test_data[['sales_pair_count', 'transaction_date']].to_numpy()
+    x_test = test_data[['sales_pair_count', 'calculated_days']].to_numpy()
     y_test = test_data['index']
 
     poly_svr.fit(x_train, y_train)
@@ -80,6 +78,7 @@ if __name__ == '__main__':
     test_data['color'] = 'red'
 
     housing_data = pd.concat([train_data, test_data])
+    print(housing_data)
 
-    fig = px.line(housing_data, x="transaction_date", y=["index", "pred_index"], title="test", color="index")
+    fig = px.line(housing_data, x="transaction_date", y=["index", "pred_index"], title="test", color="color")
     fig.show()

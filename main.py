@@ -16,7 +16,6 @@ import parse
 from train_test_data import get_train_test_data
 import regression
 import evaluate_error
-import plotly.graph_objs as go
 import pandas as pd
 from plot import Plot
 import datetime
@@ -49,21 +48,16 @@ if __name__ == '__main__':
         plot.add_raw_data_line(location_df, location)
 
         # Add the linear regression line from the train data
-        plot.add_linear_regression_line(train_data, location, num_days)
+        plot.add_linear_regression_line(train_data, test_data, location, num_days)
 
         # Add the exponential regression line from the train data
-        plot.add_exponential_regression_line(train_data, location, num_days)
+        plot.add_exponential_regression_line(train_data, test_data, location, num_days)
+
+        # Add the SV regression line from the train data
+        plot.add_svr_line(train_data, test_data, location)
 
     # Add a vertical line from 2020 onwards (COVID comes into play)
     plot.add_vline(datetime.date(2020, 1, 1))
 
     # Display the plot
     plot.show()
-
-    # # get rmse_error for test data
-    # test_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, True)
-    #
-    # # get rmse_error for training data
-    # training_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, False)
-
-    # compare rmse_error between test and training data
