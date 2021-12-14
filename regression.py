@@ -13,65 +13,77 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 """
 import datetime
 import math
-from housing_entry import IndexData
 import pandas as pd
 
 
-def least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
+def linear_least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
     """
     Return a tuple of the least squares regression slope
-    and intercept for df.
+    and intercept for the housing price dataframe.
 
-    >>> baseline = datetime.date(1990, 7, 1)
-    >>> days = [(baseline + datetime.timedelta(days=i)) for i in range(100)]
+    Preconditions:
+        - 'calculated_days' in df.columns
+        - 'index' in df.columns
+    """
+    days_data = df['calculated_days'].to_list()
+    index_data = df['index'].to_list()
+
+    return calculate_regression(days_data, index_data)
+
+
+def exponential_least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
+    """
+    Return a tuple of the least squares regression slope
+    and intercept for the housing price dataframe.
+
+    Preconditions:
+        - 'calculated_days' in df.columns
+        - 'index' in df.columns
+    """
+    days_data = df['calculated_days'].to_list()
+    index_data = natural_logarithm(df['index'].to_list())
+
+    return calculate_regression(days_data, index_data)
+
+
+def calculate_regression(x_data: list, y_data: list) -> tuple[float, float]:
+    """Returns a tuple containing the slope and intercept of the calculated regression of x and y
+
+    Preconditions:
+        - len(x_data) == len(y_data)
+
+    >>> x_data = list(range(100))
 
     # Slope of 1.0
-    >>> indexes = list(range(100))
-    >>> calculate_regression(days, indexes)
+    >>> y_data = list(range(100))
+    >>> calculate_regression(x_data, y_data)
     (1.0, 0.0)
 
     # Slope of 2.0
-    >>> indexes = list(range(0, 200, 2))
-    >>> calculate_regression(days, indexes)
+    >>> y_data = list(range(0, 200, 2))
+    >>> calculate_regression(x_data, y_data)
     (2.0, 0.0)
     """
-    days_data = df['transaction_date'].to_list()
-    index_data = df['index'].to_list()
+    n = len(x_data)
 
-    sigma_xy = sum(calculate_days(days_data[i]) * index_data[i] for i in range(len(days_data)))
-    sigma_x = sum(calculate_days(days) for days in days_data)
-    sigma_x_squared = sum((calculate_days(days) ** 2) for days in days_data)
-    sigma_y = sum(index_data)
-    n = len(days_data)
+    sigma_xy = sum(x_data[i] * y_data[i] for i in range(n))
+    sigma_x = sum(x_data)
+    sigma_x_squared = sum((x ** 2) for x in x_data)
+    sigma_y = sum(y_data)
 
     slope = ((n * sigma_xy) - (sigma_x * sigma_y)) / ((n * sigma_x_squared) - (sigma_x ** 2))
     intercept = (sigma_y - slope * sigma_x) / n
     return (slope, intercept)
 
 
-def calculate_days(current_date: str) -> int:
-    """Return the number of days passed from the baseline date, Jun 1990, to current_date
+def natural_logarithm(data: list) -> list[float]:
+    """Return a list with the natural logarithm applied to all values in data.
 
     Preconditions:
-        - datetime.datetime.strptime(current_date, '%m-%d-%Y').date() >= datetime.date(1990, 7, 1)
+        - all(entry > 0 for entry in data)
 
-    >>> calculate_days('7-1-1990')
-    0
-    >>> calculate_days('7-1-1991')
-    365
+    >>> data = [math.e, 1]
+    >>> natural_logarithm(data)
+    [1.0, 0.0]
     """
-    current_date = datetime.datetime.strptime(current_date, '%m-%d-%Y').date()
-    baseline = datetime.date(1990, 7, 1)
-    days_passed = current_date - baseline
-    return days_passed.days
-
-
-def natural_logarithm(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Return a list with the natural logarithm applied to all values in data.
-    """
-    index_data = df['index'].to_list()
-    df['index'] = [math.log(entry) for entry in index_data]
-
-    return df
-
+    return [math.log(entry) for entry in data]

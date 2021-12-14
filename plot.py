@@ -13,65 +13,51 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 """
 
 import plotly.express as px
+import plotly.graph_objs
 import plotly.graph_objs as go
 import pandas as pd
 import math
-from parse import load_data
+import parse
 import regression
 import datetime
 
-no_of_days = [i for i in range(0, 11386)]
-x_values = [datetime.date.fromordinal(i) for i in range(726619, 738005)]
 
-
-def df_linear_regression(slope: float, intercept: float) -> pd.DataFrame:
+class Plot:
     """
-    Returns a dataframe with x and y values created by the linear regression model.
+    A wrapper for a plotly graph object
     """
-    y_values = [slope * x + intercept for x in no_of_days]
-    df = pd.DataFrame()
-    df['x'] = x_values
-    df['y'] = y_values
-    return df
+    def __init__(self, layout: dict) -> None:
+        self._fig = go.Figure(layout=layout)
 
+    def add_raw_data_line(self, df: pd.DataFrame, location: str) -> None:
+        """Plots the raw data of a housing dataframe"""
+        self._fig.add_trace(go.Scatter(x=df["transaction_date"], y=df["index"],
+                                       name=location, legendgroup="Raw Data"))
 
-def df_exponential_regression(slope: float, intercept: float) -> pd.DataFrame:
-    """
-    Returns a dataframe with x and y values created by the exponential regression model.
-    """
-    y_values = [math.exp((slope * x) + intercept) for x in no_of_days]
-    df = pd.DataFrame()
-    df['x'] = x_values
-    df['y'] = y_values
-    return df
+    def add_linear_regression_line(self, df: pd.DataFrame, location: str, size: int) -> None:
+        """Adds the linear regression of the given dataframe"""
+        slope, intercept = regression.linear_least_squares_regression(df)
 
+        transaction_dates = [parse.days_to_date(day) for day in range(size + 1)]
+        indexes = [slope * day + intercept for day in range(size + 1)]
 
-if __name__ == '__main__':
-    housing_data = load_data('House_Price_Index.csv')
-    df = pd.DataFrame(housing_data['bc_victoria'])
-    df['transaction_date'] = df['transaction_date'].apply(regression.calculate_days)
+        self._fig.add_scatter(x=transaction_dates, y=indexes,
+                              name=location, legendgroup="Linear Regression")
 
-    # create line_regression_dataframe
-    x_values = [i for i in range(0, 11386)]
-    slope = regression.calculate_regression_slope(housing_data['bc_victoria'])
-    intercept = regression.calculate_regression_intercept(housing_data['bc_victoria'], slope)
-    y_values = [slope * x + intercept for x in x_values]
-    df2 = pd.DataFrame()
-    df2['x'] = x_values
-    df2['y'] = y_values
-    # fig2 = px.line(df2, x='x', y='y', title='test')
+    def add_exponential_regression_line(self, df: pd.DataFrame, location: str, size: int) -> None:
+        """Adds the exponential regression of the given dataframe"""
+        slope, intercept = regression.exponential_least_squares_regression(df)
 
-    # exponential regression
-    log_data_list = regression.natural_logarithm(housing_data['bc_victoria'])
-    slope2 = regression.calculate_regression_slope(log_data_list)
-    intercept2 = regression.calculate_regression_intercept(log_data_list, slope2)
-    y_values2 = [math.exp((x * slope2) + intercept2) for x in x_values]
-    df3 = pd.DataFrame()
-    df3['x'] = x_values
-    df3['y'] = y_values2
+        transaction_dates = [parse.days_to_date(day) for day in range(size + 1)]
+        indexes = [math.exp((slope * day) + intercept) for day in range(size + 1)]
 
-    # plot both figs on same axis
-    fig = px.line(df, x="transaction_date", y="index", title="Unsorted Input")
-    fig.add_scatter(x=df2['x'], y=df2['y'])
-    fig.add_scatter(x=df3['x'], y=df3['y'])
-    fig.show()
+        self._fig.add_scatter(x=transaction_dates, y=indexes,
+                              name=location, legendgroup="Exponential Regression")
+
+    def add_vline(self, date: datetime.date) -> None:
+        """Adds a vertical line at the specified date"""
+        self._fig.add_vline(x=date)
+
+    def show(self) -> None:
+        """Displays the plot to a new browser window"""
+        self._fig.show()

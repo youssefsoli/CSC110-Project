@@ -20,11 +20,7 @@ def evaluate_rmse_manual_regression(data: pd.DataFrame,
     """
     Returns the Root Mean Square Error value of the given data with the regression line.
     """
-
-    # turn datetime.time into days that passed from baseline date 1 Jul 1990
-    data['transaction_date'] = data['transaction_date'].apply(regression.calculate_days)
-
-    days_list = data['transaction_date'].to_list()
+    days_list = data['calculated_days'].to_list()
     test_index = data['index'].to_list()
 
     # Accumulator
@@ -65,11 +61,7 @@ def evaluate_mae(data: pd.DataFrame, reg_equation: tuple[float, float]) -> float
     """
     Return the Mean Absolute Error value of the given data with the regression line.
     """
-
-    # turn datetime.time into days that passed from baseline date 1 Jul 1990
-    data['transaction_date'] = data['transaction_date'].apply(regression.calculate_days)
-
-    days_list = data['transaction_date'].to_list()
+    days_list = data['calculated_days'].to_list()
     test_index = data['index'].to_list
 
     # Accumulator

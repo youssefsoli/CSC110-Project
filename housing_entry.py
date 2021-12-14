@@ -1,4 +1,4 @@
-"""Housing Entry: Holds a dataclass representing each entry in the dataframe.
+"""Housing Entry: Holds a dataclass representing each entry in the housing price data.
 
 Copyright and Usage Information
 ===============================

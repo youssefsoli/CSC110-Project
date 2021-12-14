@@ -1,4 +1,5 @@
-"""Plotting
+"""Geographic plot over time: This plot graphs the change in housing
+price index and sampling size overtime on an interactive map of Canada
 
 Copyright and Usage Information
 ===============================
@@ -20,7 +21,6 @@ from train_test_data import get_train_test_data
 from city_coords import COORDS
 
 if __name__ == '__main__':
-    colors = ["royalblue", "crimson", "lightseagreen", "orange", "lightgrey"]
     housing_data = load_data('House_Price_Index.csv')
     df = pd.DataFrame(housing_data['bc_vancouver'])
     df['lon'] = COORDS['bc_vancouver'][1]

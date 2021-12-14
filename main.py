@@ -13,78 +13,57 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 """
 
 import parse
-import train_test_data
+from train_test_data import get_train_test_data
 import regression
 import evaluate_error
 import plotly.graph_objs as go
 import pandas as pd
-import plot
+from plot import Plot
 import datetime
 
-# load data
-data = parse.load_data('House_Price_Index.csv')
+if __name__ == '__main__':
+    # Load data
+    housing_data = parse.load_data('House_Price_Index.csv')
 
-# get test_and_training_data
-tt_data = train_test_data.get_train_test_data(data)
+    # Holds the housing dataframe for each location
+    location_dfs = {}
 
-# get linear regression line from train data:
-regression_dict = {}
-for location in tt_data:
-    regression_dict[location] = regression.least_squares_regression(tt_data[location][0])
+    # The main visualization plot
+    plot = Plot({
+        'title': 'Scatterplot of Housing Indexes',
+        'xaxis_title': "Date",
+        'yaxis_title': "Index",
+        'legend_title': "Location"
+    })
 
-# get exponential regression line from train data:
-exp_regression_dict = {}
-for location in tt_data:
-    log_index_list = regression.natural_logarithm(tt_data[location][0])
-    exp_regression_dict[location] = regression.least_squares_regression(log_index_list)
+    for location in housing_data:
+        location_df = pd.DataFrame(housing_data[location])
+        location_dfs[location] = location_df
+        parse.add_calculated_days(location_df)
+        num_days = location_df['calculated_days'].iloc[-1]
 
-# convert list of IndexData to pandas dataframes for plotting actual prices
-accumulator = {}
-for location in data:
-    df = pd.DataFrame(data[location])
-    accumulator[location] = df
+        # Get training and testing data
+        train_data, test_data = get_train_test_data(location_df)
 
-# plot figure of actual prices
-fig = go.Figure()
-for location in data:
-    fig.add_trace(go.Scatter(x=accumulator[location]["transaction_date"],
-                             y=accumulator[location]["index"], name=location))
+        # Plot the location's raw housing data
+        plot.add_raw_data_line(location_df, location)
 
-# plot v-line for 2020 onwards
-fig.add_vline(x=datetime.date(2020, 1, 1))
+        # Add the linear regression line from the train data
+        plot.add_linear_regression_line(train_data, location, num_days)
 
+        # Add the exponential regression line from the train data
+        plot.add_exponential_regression_line(test_data, location, num_days)
 
-# plot interactive linear regression lines
-for location in regression_dict:
-    # creates a dataframe for plotting
-    df = plot.df_linear_regression(regression_dict[location][0], regression_dict[location][1])
+    # Add a vertical line from 2020 onwards (COVID comes into play)
+    plot.add_vline(datetime.date(2020, 1, 1))
 
-    # plot both figs on same axis
-    fig.add_scatter(x=df['x'], y=df['y'], name="Linear: " + location)
+    # Display the plot
+    plot.show()
 
-# plot interactive exponential regression lines
-for location in exp_regression_dict:
-    df = plot.df_exponential_regression(exp_regression_dict[location][0],
-                                        exp_regression_dict[location][1])
+    # # get rmse_error for test data
+    # test_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, True)
+    #
+    # # get rmse_error for training data
+    # training_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, False)
 
-    # plot both figs on same axis
-    fig.add_scatter(x=df['x'], y=df['y'], name="Exponential: " + location)
-
-# label axis of graph
-fig.update_layout(
-    title="Scatterplot of housing index of base year 2005 to date",
-    xaxis_title="date",
-    yaxis_title="index",
-    legend_title="Location",
-)
-
-fig.show()
-
-# get rmse_error for test data
-test_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, True)
-
-# get rmse_error for training data
-training_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, False)
-
-# compare rmse_error between test and training data
-
+    # compare rmse_error between test and training data

@@ -14,6 +14,7 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 
 import csv
 import datetime
+import pandas as pd
 
 from housing_entry import IndexData
 
@@ -51,6 +52,68 @@ def load_data(filename: str) -> dict[str, list[IndexData]]:
                 data[location].append(IndexData(date, float(row[2 * i + 1]), int(row[2 * i + 2])))
 
     return data
+
+
+def calculate_days(current_date: datetime.date) -> int:
+    """Return the number of days passed from the baseline date, Jul 1990, to current_date
+
+    Preconditions:
+        - current_date >= datetime.date(1990, 7, 1)
+
+    >>> calculate_days(datetime.date(1990, 7, 1))
+    0
+    >>> calculate_days(datetime.date(1991, 7, 1))
+    365
+    """
+    baseline = datetime.date(1990, 7, 1)
+    days_passed = current_date - baseline
+    return days_passed.days
+
+
+def calculate_days_str(current_date: str) -> int:
+    """Return the number of days passed from the baseline date, Jul 1990, to current_date
+
+    Preconditions:
+        - datetime.datetime.strptime(current_date, '%m-%d-%Y').date() >= datetime.date(1990, 7, 1)
+
+    >>> calculate_days_str('7-1-1990')
+    0
+    >>> calculate_days_str('7-1-1991')
+    365
+    """
+    current_date_obj = datetime.datetime.strptime(current_date, '%m-%d-%Y').date()
+    return calculate_days(current_date_obj)
+
+
+def days_to_date(days: int) -> datetime.date:
+    """Return the datetime.date from the days from Jul 1990
+
+    Preconditions:
+        - days > 0
+
+    >>> days_to_date(calculate_days(datetime.date(1990, 7, 1))) == datetime.date(1990, 7, 1)
+    True
+    >>> days_to_date(calculate_days(datetime.date(1991, 7, 1))) == datetime.date(1991, 7, 1)
+    True
+    """
+    baseline = datetime.date(1990, 7, 1)
+    delta = datetime.timedelta(days=days)
+    return baseline + delta
+
+
+def add_calculated_days(df: pd.DataFrame) -> None:
+    """Mutates the inputted housing dataframe with a calculated_days column
+
+    Preconditions:
+        - 'transaction_date' in df.columns
+
+    >>> df = pd.DataFrame({'transaction_date': [datetime.date(1990, 7, 1), \
+     datetime.date(1991, 7, 1)]})
+    >>> add_calculated_days(df)
+    >>> df['calculated_days'].to_list() == [0, 365]
+    True
+    """
+    df['calculated_days'] = df['transaction_date'].apply(calculate_days)
 
 
 if __name__ == '__main__':
