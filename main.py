@@ -52,7 +52,7 @@ if __name__ == '__main__':
         plot.add_linear_regression_line(train_data, location, num_days)
 
         # Add the exponential regression line from the train data
-        plot.add_exponential_regression_line(test_data, location, num_days)
+        plot.add_exponential_regression_line(train_data, location, num_days)
 
     # Add a vertical line from 2020 onwards (COVID comes into play)
     plot.add_vline(datetime.date(2020, 1, 1))
