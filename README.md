@@ -1,4 +1,4 @@
-Authors: Aidan Li, Youssef Soliman, Min Gi Kwon, Tej Jaspal Capildeo
+### Authors: Aidan Li, Youssef Soliman, Min Gi Kwon, Tej Jaspal Capildeo
 
 Project Title
 =============
@@ -86,9 +86,7 @@ with date, house index, and sales pair count.
 
 From here, we converted the entries to Pandas dataframes, and split up the dataframe containing dates and house indexes
 for the key location into two dataframes: a training dataframe and a testing dataframe. The testing dataframe contained
-all entries of data from 2020 onwards, when COVID-19 emerged. The training dataset included all entries prior to
-
-2020.
+all entries of data from 2020 onwards, when COVID-19 emerged. The training dataset included all entries prior to 2020.
 
 We used the training dataframe to calculate three different prediction models: linear regression, exponential
 regression, and SVM regression. Then, we compared the test data to the extrapolated estimates we calculated from our
