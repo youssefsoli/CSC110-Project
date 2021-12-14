@@ -1,4 +1,5 @@
-"""MAIN
+"""
+Main: this file is used to run the project.
 
 Copyright and Usage Information
 ===============================
