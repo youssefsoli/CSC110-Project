@@ -13,7 +13,6 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 """
 import math
 import datetime
-import python_ta
 import numpy as np
 from plotly.subplots import make_subplots
 from sklearn.svm import SVR
@@ -168,6 +167,7 @@ class Plot:
 
 
 if __name__ == '__main__':
+    import python_ta
     python_ta.check_all(config={
         'extra-imports': ['numpy', 'plotly.subplots',
                           'pandas', 'math', 'plotly.graph_objs',
@@ -177,3 +177,9 @@ if __name__ == '__main__':
         'max-line-length': 100,
         'disable': ['R1705', 'C0200']
     })
+
+    import python_ta.contracts
+    python_ta.contracts.check_all_contracts()
+
+    import doctest
+    doctest.testmod()

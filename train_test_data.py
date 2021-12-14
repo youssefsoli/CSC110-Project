@@ -13,6 +13,7 @@ This file is Copyright (c) 2021 Aidan Li, Youssef Soliman, Min Gi Kwon, and Tej 
 """
 
 import pandas as pd
+import python_ta
 
 
 def get_train_test_data(df: pd.DataFrame) -> \
@@ -33,3 +34,12 @@ def get_train_test_data(df: pd.DataFrame) -> \
     train_data = df[~mask].dropna()
 
     return (train_data, test_data)
+
+
+if __name__ == '__main__':
+    python_ta.check_all(config={
+        'extra-imports': ['pandas'],  # the names (strs) of imported modules
+        'allowed-io': [],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
