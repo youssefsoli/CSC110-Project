@@ -15,4 +15,7 @@ plotly
 # Data manipulation
 pandas
 datetime
+csv
 
+# Machine learning library
+sklearn
