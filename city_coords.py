@@ -1,5 +1,4 @@
-"""
-Holds city coordinates
+"""City Coords: Holds city coordinates for use in geographical scatter plot
 Sourced from: https://www.latlong.net/
 
 Copyright and Usage Information
