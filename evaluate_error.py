@@ -1,4 +1,4 @@
-"""Evaluate Error: Uses several methods to evaluate the error
+"""Evaluate Error: Uses several methods to evaluate the error of regression model
 
 Copyright and Usage Information
 ===============================
@@ -19,6 +19,12 @@ def evaluate_rmse_manual_regression(data: pd.DataFrame,
                                     reg_equation: tuple[float, float]) -> float:
     """
     Returns the Root Mean Square Error value of the given data with the regression line.
+
+    >>> lst = [1, 2, 3, 4]
+    >>> df = pd.DataFrame({'calculated_days': lst, 'index': lst})
+    >>> equation = 1, 0
+    >>> evaluate_rmse_manual_regression(df, equation)
+    0.0
     """
     days_list = data['calculated_days'].to_list()
     test_index = data['index'].to_list()
@@ -45,6 +51,7 @@ def get_rmse_for_dataset(dataset: dict, regression_dict: dict, is_test: bool) ->
 
     is_test = False returns RMSE values of the training dataset, and is_test = True returns the
     RMSE values of the test dataset.
+
     """
 
     # accumulator

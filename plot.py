@@ -23,9 +23,14 @@ import datetime
 
 
 class Plot:
+    """A wrapper for a plotly graph object.
+
     """
-    A wrapper for a plotly graph object
-    """
+    # Private Instance Attributes:
+    #   - _fig: a go.Figure instance from plotly that lines are plotted on.
+
+    _fig: go.Figure
+
     def __init__(self, layout: dict) -> None:
         self._fig = go.Figure(layout=layout)
 

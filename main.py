@@ -61,9 +61,9 @@ if __name__ == '__main__':
     plot.show()
 
     # # get rmse_error for test data
-    # test_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, True)
+    test_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, True)
     #
     # # get rmse_error for training data
-    # training_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, False)
+    training_rmse = evaluate_error.get_rmse_for_dataset(tt_data, regression_dict, False)
 
     # compare rmse_error between test and training data

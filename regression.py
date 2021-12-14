@@ -24,6 +24,11 @@ def linear_least_squares_regression(df: pd.DataFrame) -> tuple[float, float]:
     Preconditions:
         - 'calculated_days' in df.columns
         - 'index' in df.columns
+
+    >>> lst = [1, 2, 3, 4]
+    >>> df = pd.DataFrame({'calculated_days': lst, 'index': lst})
+    >>> linear_least_squares_regression(df)
+    (1.0, 0.0)
     """
     days_data = df['calculated_days'].to_list()
     index_data = df['index'].to_list()
@@ -39,6 +44,12 @@ def exponential_least_squares_regression(df: pd.DataFrame) -> tuple[float, float
     Preconditions:
         - 'calculated_days' in df.columns
         - 'index' in df.columns
+
+    >>> lst = [1, 2, 3, 4]
+    >>> exp_list = [math.exp(i) for i in range(1, 5)]
+    >>> df = pd.DataFrame({'calculated_days': lst, 'index': exp_list})
+    >>> exponential_least_squares_regression(df)
+    (1.0, 0.0)
     """
     days_data = df['calculated_days'].to_list()
     index_data = natural_logarithm(df['index'].to_list())
